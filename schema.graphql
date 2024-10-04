@@ -1,6 +1,28 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  proposalId: BigInt! # uint256
-  description: String! # string
+type User @entity {
+    id: ID!
+    proposals: [Proposal!]! @derivedFrom(field: "createdBy")
+    votes: [Vote!]! @derivedFrom(field: "voter")
+}
+
+type Vote @entity {
+    id: ID!
+    proposal: Proposal!
+    voter: User!
+    timestamp: BigInt!
+    transactionHash: Bytes!
+}
+
+type Proposal @entity {
+    id: ID!
+    description: String!
+    recipient: Bytes!
+    amount: BigInt!
+    voteCount: Int!
+    deadline: BigInt!
+    minVoteToPass: Int!
+    executed: Boolean
+    timestamp: BigInt!
+    transactionHash: Bytes!
+    votes: [Vote!]! @derivedFrom(field: "proposal")
+    createdBy: User!
 }
